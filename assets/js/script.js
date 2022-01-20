@@ -46,6 +46,51 @@ var saveTasks = function() {
 };
 
 
+// this is editing the text area in the <p> on the HTML 
+$(".list-group").on("click", "p", function() {
+  var text = $(this)
+    .text()
+    .trim();
+  var textInput = $("<textarea>")
+    .addClass("form-control")
+    .val(text);
+    $(this).replaceWith(textInput);
+    //highlight the area of <p> when it's hovered over
+    textInput.trigger("focus");
+});
+
+//this is to save your edit now
+$(".list-group").on("blur", "textarea", function() {
+// get the textarea's current value/text
+var text = $(this)
+  .val()
+  .trim();
+
+// recreate p element. This is also replacing the old P element and adding to a new one lines 69 - 75
+var taskP = $("<p>")
+.addClass("m-1")
+.text(text);
+
+// replace textarea with p element
+$(this).replaceWith(taskP);
+
+// get the parent ul's id attribute
+var status = $(this)
+  .closest(".list-group")
+  .attr("id")
+  .replace("list-", "");
+
+// get the task's position in the list of other li elements
+var index = $(this)
+  .closest(".list-group-item")
+  .index();
+// this is saving whatever the task is the user inputs 
+  tasks[status][index].text = text;
+saveTasks();
+});
+
+
+
 
 
 // modal was triggered
